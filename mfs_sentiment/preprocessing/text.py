@@ -3,12 +3,12 @@ import emoji
 from mfs_sentiment.dictionaries import BANGLISH_KEYWORDS
 
 
-def is_banglish(text: str) -> bool:
-    """Return True when a review contains known Bangla-English mixed keywords."""
-    if not isinstance(text, str):
-        return False
-    words = set(text.lower().split())
-    return bool(words & BANGLISH_KEYWORDS)
+# def is_banglish(text: str) -> bool:
+#     """Return True when a review contains known Bangla-English mixed keywords."""
+#     if not isinstance(text, str):
+#         return False
+#     words = set(text.lower().split())
+#     return bool(words & BANGLISH_KEYWORDS)
 
 
 def apply_custom_dict(text: str, translation_dict: dict) -> str:

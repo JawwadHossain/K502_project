@@ -1,5 +1,6 @@
 # Custom
 proj_env/
+suggestion/
 
 models/fasttext/*
 !models/fasttext/.gitkeep
