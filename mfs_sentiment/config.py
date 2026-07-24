@@ -20,9 +20,9 @@ FASTTEXT_MODEL_PATH = FASTTEXT_MODEL_DIR / FASTTEXT_MODEL_NAME
 
 # Raw per-app review csv locations
 DATASET_PATH_DICT = {
-    "bKash":  DATASET_DIR / "bkash_bd_reviews_200.csv",
-    "Nagad":  DATASET_DIR / "nagad_bd_reviews_200.csv",
-    "Rocket": DATASET_DIR / "rocket_bd_reviews_200.csv",
+    "bKash":  DATASET_DIR / "bkash_bd_reviews.csv",
+    "Nagad":  DATASET_DIR / "nagad_bd_reviews.csv",
+    "Rocket": DATASET_DIR / "rocket_bd_reviews.csv",
 }
 
 # Combined cleaned-but-unscored master csv, built from all apps' cleaned reviews
