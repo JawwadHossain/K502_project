@@ -40,6 +40,54 @@ def plot_rating_vs_sentiment(df: pd.DataFrame, save_path: str = os.path.join(RES
     return ax
 
 
+def plot_rating_vs_sentiment_by_app(
+    df: pd.DataFrame,
+    apps=None,
+    save_path: str = os.path.join(RESULT_DIR, "scatter_rating_vs_sentiment_by_app.png"),
+) -> np.ndarray:
+    """Create one scatter plot per app in separate subplots.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Scored master dataframe (must contain 'app_name', 'rating', 'sentiment_score').
+    apps : list, optional
+        App names to plot. If None, the first three apps found in the dataframe are used.
+    save_path : str, optional
+        Where to save the figure. Pass None to skip saving.
+
+    Returns
+    -------
+    numpy.ndarray of matplotlib.axes.Axes
+    """
+    if apps is None:
+        apps = [app for app in ["bKash", "Nagad", "Rocket"] if app in set(df["app_name"].astype(str))]
+        if not apps:
+            apps = list(df["app_name"].dropna().astype(str).unique())[:3]
+
+    selected_apps = [app for app in apps if app in set(df["app_name"].astype(str))]
+    if not selected_apps:
+        raise ValueError("No matching app names found in the dataframe.")
+
+    fig, axes = plt.subplots(1, len(selected_apps), figsize=(5 * len(selected_apps), 5), squeeze=False)
+    for ax, app_name in zip(axes.flat, selected_apps):
+        group = df[df["app_name"] == app_name]
+        normalized_rating = (group["rating"] - 3) / 2
+        ax.scatter(normalized_rating, group["sentiment_score"], alpha=0.3, s=15)
+        ax.plot([-1, 1], [-1, 1], linestyle="--", color="gray", linewidth=1, label="Perfect agreement")
+        ax.set_xlabel("Normalized Star Rating")
+        ax.set_ylabel("VADER Sentiment Score")
+        ax.set_title(app_name)
+        ax.set_xlim(-1, 1)
+        ax.set_ylim(-1, 1)
+
+    fig.suptitle("Rating vs. Sentiment by App")
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    if save_path:
+        plt.savefig(save_path, dpi=150)
+    return axes
+
+
 def plot_mismatch_composition(summary_df: pd.DataFrame, save_path: str = os.path.join(RESULT_DIR, "stacked_bar_mismatch.png")) -> Axes:
     """Stacked bar chart of Inflated/Deflated/Consistent review percentages per app.
 
