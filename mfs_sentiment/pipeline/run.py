@@ -7,7 +7,6 @@ from mfs_sentiment.config import (
     DATASET_PATH_DICT,
     LDA_TOPIC_NUM,
     LDA_TOPWORD_NUM,
-    RESULT_DIR,
 )
 from mfs_sentiment.pipeline.master import load_master_csv
 from mfs_sentiment.setup_nltk import ensure_nltk_data
@@ -58,11 +57,12 @@ def run_full_analysis(master_csv_path: Path|str, verbose: bool = True, lda_per_a
     if df is None:
         raise Exception("Incorrectly formatted master csv")
 
+    result_dir = Path(master_csv_path).resolve().parent
     summary_df = app_level_summary(df)
-    summary_df.to_csv(os.path.join(RESULT_DIR, "app_level_summary.csv"), index=False)
+    summary_df.to_csv(result_dir / "app_level_summary.csv", index=False)
 
     trend_df = monthly_gap_trend(df)
-    trend_df.to_csv(os.path.join(RESULT_DIR, "monthly_gap_trend.csv"), index=False)
+    trend_df.to_csv(result_dir / "monthly_gap_trend.csv", index=False)
 
     ensure_nltk_data()
 

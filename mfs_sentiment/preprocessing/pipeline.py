@@ -4,9 +4,8 @@ from pathlib import Path
 import pandas as pd
 
 from mfs_sentiment.config import (
-    CLEANED_CSV_DIR,
     REQUIRED_RAW_CSV_COLUMNS,
-    TRANSLATED_CSV_DIR,
+    get_run_paths,
 )
 from mfs_sentiment.dictionaries import (
     APP_SPECIFIC_TRANSLATION_DICT,
@@ -71,7 +70,7 @@ def build_standarized_csv(input_path: str|Path, only_english: bool = False) -> P
 
     Reads the raw reviews, keeps required columns, fills missing app versions,
     runs the normalization pipeline row-by-row, and writes both the translated
-    intermediate results and the cleaned dataset to CLEANED_CSV_DIR (a temp dir).
+    intermediate results and the cleaned dataset into the mode-specific temporary folders.
 
     Parameters
     ----------
@@ -85,8 +84,9 @@ def build_standarized_csv(input_path: str|Path, only_english: bool = False) -> P
     Returns
     -------
     str
-        Path to the cleaned csv, written under CLEANED_CSV_DIR.
+        Path to the cleaned csv, written under the current mode's cleaned dir.
     """
+    run_paths = get_run_paths(only_english)
     df = pd.read_csv(input_path)
     df = df[REQUIRED_RAW_CSV_COLUMNS].copy()
     df = df.dropna(subset=['review_text'])
@@ -106,11 +106,12 @@ def build_standarized_csv(input_path: str|Path, only_english: bool = False) -> P
         steps_df = steps_df[english_mask].reset_index(drop=True)
 
     base, ext = os.path.splitext(os.path.basename(input_path))
-    steps_df.to_csv(TRANSLATED_CSV_DIR / f"{base}_translated{ext}", index=False)
+    translated_path = run_paths["translated_dir"] / f"{base}_translated{ext}"
+    steps_df.to_csv(translated_path, index=False)
 
     idx = df.columns.get_loc('review_text')
     df.insert(idx + 1, 'review_text_clean', steps_df['post_translated'].values)  # type: ignore
 
-    output_path = CLEANED_CSV_DIR / f"{base}_cleaned{ext}"
+    output_path = run_paths["cleaned_dir"] / f"{base}_cleaned{ext}"
     df.to_csv(output_path, index=False)
     return output_path

@@ -17,7 +17,9 @@ def ensure_fasttext_model() -> None:
 
 
 _FT_MODEL = None
+
 def get_fasttext_model():
+    """Load and cache the FastText language-identification model."""
     global _FT_MODEL
     if _FT_MODEL is None:
         ensure_fasttext_model()
