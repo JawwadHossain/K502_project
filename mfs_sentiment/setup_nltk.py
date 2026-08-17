@@ -10,6 +10,9 @@ def ensure_nltk_data() -> None:
     import nltk
 
     for resource in ("punkt", "punkt_tab", "stopwords", "wordnet"):
-        nltk.download(resource, quiet=True)
+        try:
+            nltk.data.find(resource)
+        except LookupError:
+            nltk.download(resource, quiet=True)
 
     _NLTK_READY = True

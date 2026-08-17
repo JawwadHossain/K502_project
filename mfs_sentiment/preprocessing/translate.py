@@ -1,6 +1,5 @@
 import time
 from deep_translator import GoogleTranslator
-# from mfs_sentiment.preprocessing.text import is_banglish
 
 
 def translate_to_english(text: str, source_lang: str, confidence: float, only_english: bool = False) -> str:
@@ -36,7 +35,6 @@ def translate_to_english(text: str, source_lang: str, confidence: float, only_en
         source_lang == "en"
         and text.isascii()
         and confidence > 0.90
-        # and not is_banglish(text)
     )
     if is_confident_english:
         return text

@@ -12,6 +12,7 @@ from mfs_sentiment.viz.plots import (
     plot_mismatch_composition,
     plot_monthly_gap_heatmap,
     plot_monthly_gap_trend,
+    plot_rating_vs_sentiment,
     plot_rating_vs_sentiment_by_app,
 )
 
@@ -63,6 +64,7 @@ def main() -> None:
 
     # Step 4: visualizations
     if not args.skip_viz:
+        plot_rating_vs_sentiment(scored_df)
         plot_rating_vs_sentiment_by_app(scored_df)
         plot_mismatch_composition(summary_df)
         plot_monthly_gap_heatmap(trend_df)

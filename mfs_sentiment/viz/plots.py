@@ -82,7 +82,7 @@ def plot_rating_vs_sentiment_by_app(
         ax.set_ylim(-1, 1)
 
     fig.suptitle("Rating vs. Sentiment by App")
-    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
     if save_path:
         plt.savefig(save_path, dpi=150)
     return axes

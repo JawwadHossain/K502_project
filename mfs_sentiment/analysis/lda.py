@@ -1,23 +1,12 @@
 import pandas as pd
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import CountVectorizer
 
 from mfs_sentiment.config import LDA_MIN_THRESHOLD, STOPWORDS_FOR_LDA
 from mfs_sentiment.setup_nltk import ensure_nltk_data
-
-_lemmatizer = None
-_custom_stopwords = None
-
-
-def _ensure_lda_resources() -> None:
-    global _lemmatizer, _custom_stopwords
-    ensure_nltk_data()
-    if _custom_stopwords is None or _lemmatizer is None:
-        from nltk.corpus import stopwords
-        from nltk.stem import WordNetLemmatizer
-
-        _lemmatizer = WordNetLemmatizer()
-        _custom_stopwords = set(stopwords.words("english")) | STOPWORDS_FOR_LDA
 
 
 def _preprocess_for_lda(text: str) -> str:
@@ -47,13 +36,15 @@ def _preprocess_for_lda(text: str) -> str:
     - Requires NLTK tokenizer, lemmatizer, and stopwords to be downloaded
     - Use sparingly; preprocessing can be time-intensive for large datasets
     """
-    from nltk.tokenize import word_tokenize
+    
+    lemmatizer = WordNetLemmatizer()
+    custom_stopwords = set(stopwords.words("english")) | STOPWORDS_FOR_LDA
 
-    _ensure_lda_resources()
+    ensure_nltk_data()
     tokens = word_tokenize(str(text).lower())
     tokens = [t for t in tokens if t.isalpha()]                 # Discarding punctuation/numbers
-    tokens = [t for t in tokens if t not in _custom_stopwords]  # Removing stopwords
-    tokens = [_lemmatizer.lemmatize(t) for t in tokens]         # Converting words to root form: running -> run
+    tokens = [t for t in tokens if t not in custom_stopwords]  # Removing stopwords
+    tokens = [lemmatizer.lemmatize(t) for t in tokens]         # Converting words to root form: running -> run
     return " ".join(tokens)
 
 

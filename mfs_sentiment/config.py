@@ -47,7 +47,7 @@ DATASET_PATH_DICT = {
 
 # Combined cleaned-but-unscored master csv, built from all apps' cleaned reviews
 MASTER_CSV_PATH = RESULT_DIR / "master_bd_reviews.csv"
-# Master csv after sentiment + gap scoring has been applied
+# Master csv after sentiment + gap scoring has been applied (scored)
 SCORED_MASTER_CSV_PATH = RESULT_DIR / "master_bd_reviews_scored.csv"
 
 REQUIRED_RAW_CSV_COLUMNS = ['app_name', 'review_id', 'review_date', 'rating', 'review_text', 'thumbs_up_count', 'app_version']
