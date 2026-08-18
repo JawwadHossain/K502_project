@@ -28,7 +28,7 @@ The pipeline is run twice: once on English-only reviews, once on the full Bangla
   - Depends on custom modules
 - main.py
 
-*Note: All files require proper directory structure to work properly*
+*Note: All files require correct directory structure to work properly*
 
 # 
 
